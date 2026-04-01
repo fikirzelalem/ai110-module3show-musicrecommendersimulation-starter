@@ -35,6 +35,33 @@ Each song receives points based on how well it matches the user:
 **Ranking Rule:**
 All songs are scored, then sorted highest-to-lowest. The top-k songs are returned with an explanation of why each one was chosen.
 
+**Algorithm Recipe (finalized weights):**
+| Feature | Match Type | Points |
+|---|---|---|
+| Genre | Exact match | +2.0 |
+| Mood | Exact match | +1.0 |
+| Energy | Closeness: `1 - abs(song.energy - target)` | 0.0–1.0 |
+| Acousticness | +0.5 if user likes acoustic and song > 0.6 | +0.5 (bonus) |
+
+Max possible score: ~4.5. Genre is weighted heaviest because it's the broadest filter — a jazz fan and a metal fan have fundamentally different tastes even if both want "intense" energy.
+
+**Potential bias note:** This system may over-prioritize genre, causing it to miss great mood or energy matches from unexpected genres. A chill hip-hop track could score lower than an intense pop track for a "pop" user, even if the user just wants something relaxed.
+
+**Data Flow:**
+
+```mermaid
+flowchart LR
+    A[User Profile\ngenre · mood · energy] --> B[Load songs.csv\n18 songs]
+    B --> C{Score each song}
+    C --> D[Genre match?\n+2.0 pts]
+    C --> E[Mood match?\n+1.0 pts]
+    C --> F[Energy closeness\n0.0–1.0 pts]
+    C --> G[Acoustic bonus?\n+0.5 pts]
+    D & E & F & G --> H[Total Score]
+    H --> I[Sort all songs\nhigh → low]
+    I --> J[Return Top-K\nwith explanation]
+```
+
 ---
 
 ## Getting Started
