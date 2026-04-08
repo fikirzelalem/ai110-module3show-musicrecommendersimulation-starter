@@ -101,11 +101,94 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+### Terminal Output — All 5 Profiles
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+```
+Loaded 18 songs from data/songs.csv
+
+=======================================================
+Profile: High-Energy Pop
+Prefs: {'genre': 'pop', 'mood': 'happy', 'energy': 0.9, 'likes_acoustic': False}
+=======================================================
+  1. Sunrise City by Neon Echo — Score: 3.92
+     Because: genre match: pop (+2.0); mood match: happy (+1.0); energy closeness (+0.92)
+  2. Gym Hero by Max Pulse — Score: 2.97
+     Because: genre match: pop (+2.0); energy closeness (+0.97)
+  3. Block Party by Kraze — Score: 1.95
+     Because: mood match: happy (+1.0); energy closeness (+0.95)
+  4. Rooftop Lights by Indigo Parade — Score: 1.86
+     Because: mood match: happy (+1.0); energy closeness (+0.86)
+  5. Golden Hour by Soleil — Score: 1.71
+     Because: mood match: happy (+1.0); energy closeness (+0.71)
+
+=======================================================
+Profile: Chill Lofi
+Prefs: {'genre': 'lofi', 'mood': 'chill', 'energy': 0.4, 'likes_acoustic': True}
+=======================================================
+  1. Midnight Coding by LoRoom — Score: 4.48
+     Because: genre match: lofi (+2.0); mood match: chill (+1.0); energy closeness (+0.98); acoustic bonus (+0.5)
+  2. Library Rain by Paper Lanterns — Score: 4.45
+     Because: genre match: lofi (+2.0); mood match: chill (+1.0); energy closeness (+0.95); acoustic bonus (+0.5)
+  3. Focus Flow by LoRoom — Score: 3.50
+     Because: genre match: lofi (+2.0); energy closeness (+1.0); acoustic bonus (+0.5)
+  4. Rainy Season by Coastal Drift — Score: 2.41
+     Because: mood match: chill (+1.0); energy closeness (+0.91); acoustic bonus (+0.5)
+  5. Spacewalk Thoughts by Orbit Bloom — Score: 2.38
+     Because: mood match: chill (+1.0); energy closeness (+0.88); acoustic bonus (+0.5)
+
+=======================================================
+Profile: Deep Intense Rock
+Prefs: {'genre': 'rock', 'mood': 'intense', 'energy': 0.95, 'likes_acoustic': False}
+=======================================================
+  1. Storm Runner by Voltline — Score: 3.96
+     Because: genre match: rock (+2.0); mood match: intense (+1.0); energy closeness (+0.96)
+  2. Bass Drop by Circuit Nine — Score: 1.99
+     Because: mood match: intense (+1.0); energy closeness (+0.99)
+  3. Gym Hero by Max Pulse — Score: 1.98
+     Because: mood match: intense (+1.0); energy closeness (+0.98)
+  4. Shatter by Iron Veil — Score: 1.98
+     Because: mood match: intense (+1.0); energy closeness (+0.98)
+  5. Block Party by Kraze — Score: 0.90
+     Because: energy closeness (+0.9)
+
+=======================================================
+Profile: Moody Electronic
+Prefs: {'genre': 'electronic', 'mood': 'moody', 'energy': 0.8, 'likes_acoustic': False}
+=======================================================
+  1. Neon Jungle by Prism Wave — Score: 4.00
+     Because: genre match: electronic (+2.0); mood match: moody (+1.0); energy closeness (+1.0)
+  2. Bass Drop by Circuit Nine — Score: 2.84
+     Because: genre match: electronic (+2.0); energy closeness (+0.84)
+  3. Night Drive Loop by Neon Echo — Score: 1.95
+     Because: mood match: moody (+1.0); energy closeness (+0.95)
+  4. Sunrise City by Neon Echo — Score: 0.98
+     Because: energy closeness (+0.98)
+  5. Rooftop Lights by Indigo Parade — Score: 0.96
+     Because: energy closeness (+0.96)
+
+=======================================================
+Profile: Edge Case - High Energy but Relaxed
+Prefs: {'genre': 'r&b', 'mood': 'relaxed', 'energy': 0.9, 'likes_acoustic': False}
+=======================================================
+  1. Slow Burn by Velvet Tone — Score: 3.58
+     Because: genre match: r&b (+2.0); mood match: relaxed (+1.0); energy closeness (+0.58)
+  2. Golden Hour by Soleil — Score: 2.71
+     Because: genre match: r&b (+2.0); energy closeness (+0.71)
+  3. Porch Swing by The Willows — Score: 1.49
+     Because: mood match: relaxed (+1.0); energy closeness (+0.49)
+  4. Coffee Shop Stories by Slow Stereo — Score: 1.47
+     Because: mood match: relaxed (+1.0); energy closeness (+0.47)
+  5. Storm Runner by Voltline — Score: 0.99
+     Because: energy closeness (+0.99)
+```
+
+### Observations
+
+- **High-Energy Pop**: The system correctly surfaced genre+mood matches at the top. Songs without a genre match but with mood/energy alignment still appeared, showing the scoring degrades gracefully.
+- **Chill Lofi**: The acoustic bonus (+0.5) made a noticeable difference — both top results had all four signals firing at once.
+- **Deep Intense Rock**: Only one rock song in the catalog, so positions 2–5 fell back on mood and energy alone. This exposes a catalog coverage gap.
+- **Moody Electronic**: Clean result — the top pick scored a perfect 4.0 with genre + mood + exact energy match.
+- **Edge Case (High Energy but Relaxed)**: The conflict between high energy (0.9) and relaxed mood caused the r&b genre match to dominate. The system picked "Slow Burn" which is a lower-energy r&b track, meaning genre weight overrode the energy preference — a known limitation of the scoring design.
 
 ---
 
