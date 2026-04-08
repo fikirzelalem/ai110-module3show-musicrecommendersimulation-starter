@@ -8,7 +8,7 @@
 
 ## 2. Intended Use  
 
-VibeFinder suggests songs based on what genre, mood, and energy level you're in the mood for. It's not a real app, it's more of a classroom project to show how content-based recommendation works. You tell it what you want, it scores every song in the catalog, and gives you the top 5. It's not meant to replace Spotify or anything like that, just to show the logic behind how those systems think.
+SoundMatch suggests songs based on what genre, mood, and energy level you're in the mood for. It's not a real app, it's more of a classroom project to show how content-based recommendation works. You tell it what you want, it scores every song in the catalog, and gives you the top 5. It's not meant to replace Spotify or anything like that, just to show the logic behind how those systems think.
 
 ---
 
@@ -74,6 +74,10 @@ The last thing I'd want is some kind of listening history. Right now if you run 
 
 ## 9. Personal Reflection  
 
-I went into this thinking a recommender system would be more complicated than it actually is. It's really just scoring and sorting. Once I saw that, it made me look at apps like Spotify differently. All that "we think you'll like this" stuff is just math under the hood, the hard part is choosing the right features and weights.
+My biggest learning moment was realizing how simple this actually is under the hood. I went in expecting something complicated, and it turned out to be scoring and sorting. That honestly changed how I look at apps like Spotify. All that "we think you'll like this" stuff is just math, the hard part is picking the right features and figuring out how much weight to give each one.
 
-What got me was how fast bias crept in without me trying. I never planned to make a system that fails for high-energy r&b listeners, but that's exactly what happened because I gave genre too many points. Nobody told me to do that, it just seemed like the right call at the time. I think about that when I use recommendation apps now. The weirdness in their suggestions probably isn't random, it's the result of choices someone made early on that nobody went back to question.
+Using AI tools throughout this project was genuinely helpful for getting started and moving fast, especially when implementing the functions and formatting the output. But I had to double-check a lot of things. A few times the AI would suggest code that worked but didn't quite match what I actually wanted, like returning the wrong data structure or missing the reasons list. I learned to not just run the code and move on, you have to read it and make sure it's doing what you think it's doing.
+
+The thing that surprised me most is how much the output feels like a real recommendation even though the logic is so basic. When "Neon Jungle" came up as the top pick for the Moody Electronic profile with a perfect score, it genuinely felt right. I had to remind myself that the system has no idea what music sounds like, it's just comparing labels and numbers. That gap between how it feels and how it actually works is kind of wild to think about.
+
+If I kept going with this I'd want to try adding tempo as a real feature, like matching users who want fast or slow songs specifically. I'd also want to experiment with making genre matching fuzzy so similar genres can still score partial points. Those two changes alone would probably make the recommendations feel a lot more natural.
