@@ -194,15 +194,14 @@ Prefs: {'genre': 'r&b', 'mood': 'relaxed', 'energy': 0.9, 'likes_acoustic': Fals
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
+The biggest thing I noticed is that genre has way too much power. It's worth +2.0 points, which means a song in the right genre will almost always beat a better match from a different genre. When I ran the edge case profile, high energy but relaxed mood in r&b, the system recommended "Slow Burn" which is actually a pretty slow, low-energy track. It won just because it was r&b. That felt wrong to me.
 
-Examples:
+The catalog being only 18 songs is also a real problem. For the Deep Intense Rock profile there is literally only one rock song, so after that the system just grabs whatever has similar energy. That's not really a recommendation and is just a fallback.
 
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+A few other things worth noting:
+- It has no idea what the lyrics are about or what language a song is in
+- Every user is treated the same as there's no memory of what you've listened to before
+- Some genres and moods are barely represented in the dataset, so users with niche taste get weak results
 
 ---
 
