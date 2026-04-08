@@ -95,6 +95,11 @@ def load_songs(csv_path: str) -> List[Dict]:
                 "valence": float(row["valence"]),
                 "danceability": float(row["danceability"]),
                 "acousticness": float(row["acousticness"]),
+                "popularity": int(row["popularity"]),
+                "release_decade": int(row["release_decade"]),
+                "mood_tag": row["mood_tag"],
+                "explicit": int(row["explicit"]),
+                "live_feel": float(row["live_feel"]),
             })
     print(f"Loaded {len(songs)} songs from {csv_path}")
     return songs
@@ -121,6 +126,27 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
     if user_prefs.get("likes_acoustic") and song["acousticness"] > 0.6:
         score += 0.5
         reasons.append("acoustic bonus (+0.5)")
+
+    if user_prefs.get("likes_popular") and song.get("popularity", 0) > 70:
+        popularity_bonus = round(song["popularity"] / 250, 2)
+        score += popularity_bonus
+        reasons.append(f"popularity bonus (+{popularity_bonus})")
+
+    if user_prefs.get("preferred_decade") and song.get("release_decade") == user_prefs["preferred_decade"]:
+        score += 0.5
+        reasons.append(f"era match: {song['release_decade']}s (+0.5)")
+
+    if user_prefs.get("preferred_mood_tag") and song.get("mood_tag") == user_prefs["preferred_mood_tag"]:
+        score += 0.75
+        reasons.append(f"mood tag match: {song['mood_tag']} (+0.75)")
+
+    if user_prefs.get("prefers_clean") and song.get("explicit", 0) == 1:
+        score -= 0.5
+        reasons.append("explicit penalty (-0.5)")
+
+    if user_prefs.get("likes_live") and song.get("live_feel", 0) > 0.5:
+        score += 0.3
+        reasons.append(f"live feel bonus (+0.3)")
 
     return round(score, 2), reasons
 
