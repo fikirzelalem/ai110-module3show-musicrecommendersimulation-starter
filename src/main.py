@@ -3,6 +3,7 @@ Command line runner for the Music Recommender Simulation.
 Tests multiple user profiles to evaluate recommender behavior.
 """
 
+from tabulate import tabulate
 from src.recommender import load_songs, recommend_songs, SCORING_MODES
 
 
@@ -37,16 +38,15 @@ PROFILES = {
 
 def print_recommendations(label: str, user_prefs: dict, songs: list, k: int = 5, mode: str = "genre-first", diverse: bool = False) -> None:
     tag = f"Mode: {mode}" + (" | diverse" if diverse else "")
-    print(f"\n{'='*55}")
-    print(f"Profile: {label}  |  {tag}")
-    print(f"{'='*55}")
+    print(f"\nProfile: {label}  |  {tag}")
     recommendations = recommend_songs(user_prefs, songs, k=k, mode=mode, diverse=diverse)
     if not recommendations:
         print("  No recommendations found.")
         return
+    rows = []
     for i, (song, score, explanation) in enumerate(recommendations, 1):
-        print(f"  {i}. {song['title']} by {song['artist']} — Score: {score:.2f}")
-        print(f"     Because: {explanation}")
+        rows.append([i, song["title"], song["artist"], f"{score:.2f}", explanation])
+    print(tabulate(rows, headers=["#", "Title", "Artist", "Score", "Reasons"], tablefmt="fancy_grid", maxcolwidths=[None, 20, 18, None, 55]))
 
 
 def main() -> None:
