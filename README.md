@@ -4,7 +4,7 @@
 
 This project simulates a content-based music recommender system. Given a user's taste profile (preferred genre, mood, and energy level), the system scores each song in a small catalog and returns the top matches with a plain-language explanation of why each song was recommended.
 
-Unlike collaborative filtering systems (like Spotify's "users like you also liked..."), this recommender relies only on song attributes — no listening history or crowd behavior is used. This makes it simple, transparent, and easy to reason about, but also limited in ways that are worth examining.
+Unlike collaborative filtering systems (like Spotify's "users like you also liked..."), this recommender relies only on song attributes with no listening history or crowd behavior involved. This makes it simple, transparent, and easy to reason about, but also limited in ways that are worth examining.
 
 ---
 
@@ -43,7 +43,7 @@ All songs are scored, then sorted highest-to-lowest. The top-k songs are returne
 | Energy | Closeness: `1 - abs(song.energy - target)` | 0.0–1.0 |
 | Acousticness | +0.5 if user likes acoustic and song > 0.6 | +0.5 (bonus) |
 
-Max possible score: ~4.5. Genre is weighted heaviest because it's the broadest filter — a jazz fan and a metal fan have fundamentally different tastes even if both want "intense" energy.
+Max possible score: ~4.5. Genre is weighted heaviest because it's the broadest filter. A jazz fan and a metal fan have fundamentally different tastes even if both want "intense" energy.
 
 **Potential bias note:** This system may over-prioritize genre, causing it to miss great mood or energy matches from unexpected genres. A chill hip-hop track could score lower than an intense pop track for a "pop" user, even if the user just wants something relaxed.
 
@@ -221,9 +221,9 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Building this made me realize how much a recommender system is just math dressed up as taste. You assign numbers to features, do some arithmetic, sort the list — and suddenly it looks like the computer "knows" what you like. But it doesn't. It just knows what you told it, and it repeats that back to you in a ranked order. The High-Energy Pop profile and the Chill Lofi profile feel completely different when you look at the results, but the underlying process is identical. The only thing that changes is which numbers win.
+Building this made me realize how much a recommender system is just math dressed up as taste. You assign numbers to features, do some arithmetic, sort the list and suddenly it looks like the computer "knows" what you like. But it doesn't. It just knows what you told it, and it repeats that back to you in a ranked order. The High-Energy Pop profile and the Chill Lofi profile feel completely different when you look at the results, but the underlying process is identical. The only thing that changes is which numbers win.
 
-The part that stuck with me most is how easy it is to build in bias without realizing it. When I tested the edge case profile — someone who wanted high-energy r&b — the system kept recommending slow r&b tracks because genre was worth so much more than energy. It wasn't broken, it was doing exactly what I told it to do. That's kind of the scary part. Real systems like Spotify or TikTok have the same problem at a much bigger scale, and the people building them probably didn't set out to create something unfair. The bias just comes from the choices you make about what to weight and what data to include.
+The part that stuck with me most is how easy it is to build in bias without realizing it. When I tested the edge case profile, someone who wanted high-energy r&b, the system kept recommending slow r&b tracks because genre was worth so much more than energy. It wasn't broken, it was doing exactly what I told it to do. That's kind of the scary part. Real systems like Spotify or TikTok have the same problem at a much bigger scale, and the people building them probably didn't set out to create something unfair. The bias just comes from the choices you make about what to weight and what data to include.
 
 
 ---

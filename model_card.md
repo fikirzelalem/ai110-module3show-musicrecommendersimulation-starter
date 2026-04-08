@@ -61,11 +61,11 @@ Prompts:
 
 ## 6. Limitations and Bias 
 
-The biggest issue I found is that genre carries too much weight. At +2.0 points it basically controls the whole ranking, so even if a song has the wrong energy or mood, it'll still end up near the top just for being in the right genre. I ran into this with the edge case profile — the system kept recommending "Slow Burn" to a user who wanted high energy, just because it was r&b. That felt wrong.
+The biggest issue I found is that genre carries too much weight. At +2.0 points it basically controls the whole ranking, so even if a song has the wrong energy or mood, it'll still end up near the top just for being in the right genre. I ran into this with the edge case profile — the system kept recommending "Slow Burn" to a user who wanted high energy just because it was r&b. That felt wrong.
 
 Most genres in the dataset only have one song, which makes things awkward. If you're a rock fan, your first result is fine, but after that the system just grabs whatever has similar energy from totally different genres. At that point it's not really recommending music, it's just filling slots.
 
-The genre matching is also exact — "indie pop" and "pop" are treated as completely different things. So a pop fan won't get matched to "Rooftop Lights" even though it would probably fit their taste. There's no fuzzy matching or genre similarity built in.
+The genre matching is also exact. "indie pop" and "pop" are treated as completely different things. So a pop fan won't get matched to "Rooftop Lights" even though it would probably fit their taste. There's no fuzzy matching or genre similarity built in.
 
 One more thing: there's only one song tagged as "focused" in the whole catalog. If someone just wants music to study to, they're almost guaranteed to get bad mood matches across the board. Some user types just aren't supported by this dataset at all.
 
@@ -75,7 +75,7 @@ One more thing: there's only one song tagged as "focused" in the whole catalog. 
 
 I tested five different user profiles: High-Energy Pop, Chill Lofi, Deep Intense Rock, Moody Electronic, and an edge case I called "High Energy but Relaxed." For each one I ran the full recommender and looked at whether the top 5 results actually made sense for that type of listener.
 
-Most of them felt right. The Chill Lofi profile got lofi songs with acoustic vibes at the top, and the Moody Electronic profile landed on Neon Jungle as a perfect match — genre, mood, and energy all lined up. Those felt like wins.
+Most of them felt right. The Chill Lofi profile got lofi songs with acoustic vibes at the top, and the Moody Electronic profile landed on Neon Jungle as a perfect match. Genre, mood, and energy all lined up. Those felt like wins.
 
 The one that surprised me most was the edge case. I set up a profile that wanted r&b but also wanted high energy (0.9), which is kind of contradictory since most r&b in the catalog is pretty mellow. The system still picked r&b songs at the top because the genre weight is so strong. "Slow Burn" scored 3.58 even though its energy is only 0.48 — way off from what the user asked for. A person using a real app would probably be confused by that result.
 
