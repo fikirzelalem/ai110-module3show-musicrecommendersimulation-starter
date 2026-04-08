@@ -3,7 +3,7 @@ Command line runner for the Music Recommender Simulation.
 Tests multiple user profiles to evaluate recommender behavior.
 """
 
-from src.recommender import load_songs, recommend_songs
+from src.recommender import load_songs, recommend_songs, SCORING_MODES
 
 
 PROFILES = {
@@ -35,12 +35,11 @@ PROFILES = {
 }
 
 
-def print_recommendations(label: str, user_prefs: dict, songs: list, k: int = 5) -> None:
+def print_recommendations(label: str, user_prefs: dict, songs: list, k: int = 5, mode: str = "genre-first") -> None:
     print(f"\n{'='*55}")
-    print(f"Profile: {label}")
-    print(f"Prefs: {user_prefs}")
+    print(f"Profile: {label}  |  Mode: {mode}")
     print(f"{'='*55}")
-    recommendations = recommend_songs(user_prefs, songs, k=k)
+    recommendations = recommend_songs(user_prefs, songs, k=k, mode=mode)
     if not recommendations:
         print("  No recommendations found.")
         return
@@ -51,8 +50,16 @@ def print_recommendations(label: str, user_prefs: dict, songs: list, k: int = 5)
 
 def main() -> None:
     songs = load_songs("data/songs.csv")
+
+    print("\n\n*** Standard run: all profiles using genre-first mode ***")
     for label, prefs in PROFILES.items():
         print_recommendations(label, prefs, songs)
+
+    print("\n\n*** Scoring mode comparison: Edge Case profile across all modes ***")
+    edge_prefs = PROFILES["Edge Case - High Energy but Relaxed"]
+    for mode in SCORING_MODES:
+        print_recommendations("Edge Case - High Energy but Relaxed", edge_prefs, songs, mode=mode)
+
     print()
 
 
