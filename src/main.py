@@ -35,11 +35,12 @@ PROFILES = {
 }
 
 
-def print_recommendations(label: str, user_prefs: dict, songs: list, k: int = 5, mode: str = "genre-first") -> None:
+def print_recommendations(label: str, user_prefs: dict, songs: list, k: int = 5, mode: str = "genre-first", diverse: bool = False) -> None:
+    tag = f"Mode: {mode}" + (" | diverse" if diverse else "")
     print(f"\n{'='*55}")
-    print(f"Profile: {label}  |  Mode: {mode}")
+    print(f"Profile: {label}  |  {tag}")
     print(f"{'='*55}")
-    recommendations = recommend_songs(user_prefs, songs, k=k, mode=mode)
+    recommendations = recommend_songs(user_prefs, songs, k=k, mode=mode, diverse=diverse)
     if not recommendations:
         print("  No recommendations found.")
         return
@@ -59,6 +60,10 @@ def main() -> None:
     edge_prefs = PROFILES["Edge Case - High Energy but Relaxed"]
     for mode in SCORING_MODES:
         print_recommendations("Edge Case - High Energy but Relaxed", edge_prefs, songs, mode=mode)
+
+    print("\n\n*** Diversity mode: Chill Lofi (without vs with diversity penalty) ***")
+    print_recommendations("Chill Lofi", PROFILES["Chill Lofi"], songs, diverse=False)
+    print_recommendations("Chill Lofi", PROFILES["Chill Lofi"], songs, diverse=True)
 
     print()
 

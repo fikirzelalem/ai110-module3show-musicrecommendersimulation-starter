@@ -163,7 +163,7 @@ def score_song(user_prefs: Dict, song: Dict, weights: Dict = None) -> Tuple[floa
     return round(score, 2), reasons
 
 
-def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5, mode: str = "genre-first") -> List[Tuple[Dict, float, str]]:
+def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5, mode: str = "genre-first", diverse: bool = False) -> List[Tuple[Dict, float, str]]:
     """Score and rank all songs, returning the top-k as (song, score, explanation) tuples."""
     weights = SCORING_MODES.get(mode, SCORING_MODES["genre-first"])
     scored = []
@@ -173,4 +173,34 @@ def recommend_songs(user_prefs: Dict, songs: List[Dict], k: int = 5, mode: str =
         scored.append((song, score, explanation))
 
     scored = sorted(scored, key=lambda x: x[1], reverse=True)
-    return scored[:k]
+
+    if not diverse:
+        return scored[:k]
+
+    selected = []
+    selected_artists = []
+    selected_genres = []
+
+    for song, score, explanation in scored:
+        adjusted_score = score
+        penalty_notes = []
+
+        if song["artist"] in selected_artists:
+            adjusted_score -= 1.0
+            penalty_notes.append("repeat artist (-1.0)")
+
+        if selected_genres.count(song["genre"]) >= 2:
+            adjusted_score -= 0.5
+            penalty_notes.append("genre overrepresented (-0.5)")
+
+        if penalty_notes:
+            explanation += "; " + "; ".join(penalty_notes)
+
+        selected.append((song, round(adjusted_score, 2), explanation))
+        selected_artists.append(song["artist"])
+        selected_genres.append(song["genre"])
+
+        if len(selected) == k:
+            break
+
+    return selected
