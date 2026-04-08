@@ -185,10 +185,20 @@ Prefs: {'genre': 'r&b', 'mood': 'relaxed', 'energy': 0.9, 'likes_acoustic': Fals
 ### Observations
 
 - **High-Energy Pop**: The system correctly surfaced genre+mood matches at the top. Songs without a genre match but with mood/energy alignment still appeared, showing the scoring degrades gracefully.
-- **Chill Lofi**: The acoustic bonus (+0.5) made a noticeable difference — both top results had all four signals firing at once.
+- **Chill Lofi**: The acoustic bonus (+0.5) made a noticeable difference, both top results had all four signals firing at once.
 - **Deep Intense Rock**: Only one rock song in the catalog, so positions 2–5 fell back on mood and energy alone. This exposes a catalog coverage gap.
-- **Moody Electronic**: Clean result — the top pick scored a perfect 4.0 with genre + mood + exact energy match.
-- **Edge Case (High Energy but Relaxed)**: The conflict between high energy (0.9) and relaxed mood caused the r&b genre match to dominate. The system picked "Slow Burn" which is a lower-energy r&b track, meaning genre weight overrode the energy preference — a known limitation of the scoring design.
+- **Moody Electronic**: Had a clean result, the top pick scored a perfect 4.0 with genre + mood + exact energy match.
+- **Edge Case (High Energy but Relaxed)**: The conflict between high energy (0.9) and relaxed mood caused the r&b genre match to dominate. The system picked "Slow Burn" which is actually a pretty low-energy track. It won just because it was r&b, which felt off.
+
+### Weight Shift Experiment
+
+I tested what would happen if I halved the genre weight (2.0 → 1.0) and doubled the energy weight (1.0 → 2.0). A couple of things changed which are:
+
+- In the **Moody Electronic** profile, "Night Drive Loop" jumped to #2, pushing "Bass Drop" down. Night Drive Loop matched on mood and energy but not genre, the old weights would've buried it.
+- In the **Edge Case** profile, "Storm Runner" climbed from #5 to #3 purely based on energy closeness. That actually makes more sense for someone wanting high-energy music even if it's the wrong genre.
+- Most of the other profiles stayed basically the same which tells me the top results were genuinely strong matches not just flukes.
+
+I ended up keeping the original weights because the system still felt more accurate overall with the genres weighted higher but the experiment showed that energy matters more than I initially thought especially for edge case users.
 
 ---
 
