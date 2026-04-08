@@ -73,16 +73,15 @@ One more thing: there's only one song tagged as "focused" in the whole catalog. 
 
 ## 7. Evaluation  
 
-How you checked whether the recommender behaved as expected. 
+I tested five different user profiles: High-Energy Pop, Chill Lofi, Deep Intense Rock, Moody Electronic, and an edge case I called "High Energy but Relaxed." For each one I ran the full recommender and looked at whether the top 5 results actually made sense for that type of listener.
 
-Prompts:  
+Most of them felt right. The Chill Lofi profile got lofi songs with acoustic vibes at the top, and the Moody Electronic profile landed on Neon Jungle as a perfect match — genre, mood, and energy all lined up. Those felt like wins.
 
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
+The one that surprised me most was the edge case. I set up a profile that wanted r&b but also wanted high energy (0.9), which is kind of contradictory since most r&b in the catalog is pretty mellow. The system still picked r&b songs at the top because the genre weight is so strong. "Slow Burn" scored 3.58 even though its energy is only 0.48 — way off from what the user asked for. A person using a real app would probably be confused by that result.
 
-No need for numeric metrics unless you created some.
+I also ran a weight shift experiment where I cut the genre weight in half and doubled the energy weight. That changed a few rankings — especially for the edge case and the Moody Electronic profile — but most results stayed the same. That told me the system is mostly working as designed, just a little too locked in on genre.
+
+I also wrote pytest tests for `score_song` and `recommend_songs` to make sure the math was correct before trusting the output.
 
 ---
 

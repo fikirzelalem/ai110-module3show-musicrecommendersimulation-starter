@@ -221,10 +221,9 @@ Read and complete `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
+Building this made me realize how much a recommender system is just math dressed up as taste. You assign numbers to features, do some arithmetic, sort the list — and suddenly it looks like the computer "knows" what you like. But it doesn't. It just knows what you told it, and it repeats that back to you in a ranked order. The High-Energy Pop profile and the Chill Lofi profile feel completely different when you look at the results, but the underlying process is identical. The only thing that changes is which numbers win.
 
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+The part that stuck with me most is how easy it is to build in bias without realizing it. When I tested the edge case profile — someone who wanted high-energy r&b — the system kept recommending slow r&b tracks because genre was worth so much more than energy. It wasn't broken, it was doing exactly what I told it to do. That's kind of the scary part. Real systems like Spotify or TikTok have the same problem at a much bigger scale, and the people building them probably didn't set out to create something unfair. The bias just comes from the choices you make about what to weight and what data to include.
 
 
 ---
